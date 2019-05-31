@@ -1,8 +1,12 @@
 # -*- coding:utf-8 -*-
 import re
-import os
+import os,sys
 import requests
 import time
+from urllib.parse import urlparse
+is_python3 = sys.version_info.major == 3
+if is_python3:
+    unicode = str
 
 class Spider:
     url=''
@@ -121,7 +125,67 @@ class Spider:
         return self.file_put_contents(self.target_root_dir + '/' + '%s.log' % log_file,
                                  "[%s] %s\n" % (time.strftime('%Y-%m-%d %H:%M:%S'), msg), 'ab')
 
-    def print(self, *args, sep=' ', end='\n', file=None):
+    def get_target_name(self, url, origin_name=True):
+        """
+        获取要保存的文件名
+        :param url:
+        :param origin_name:
+        :return:
+        """
+        filename = os.path.basename(url.strip())
+
+        pos = filename.find('?')
+        if pos != -1:
+            filename = filename[0: pos]
+
+        if filename and not origin_name:
+            path = os.path.dirname(url.strip()).replace('http://', '').replace('https://', '').replace('//', '').replace('..', '')
+            filename = '%s-%s' % (path.replace('/', '-'), filename)
+        return filename
+
+    def real_url(self, uri, base_url=''):
+        """
+        返回真实的url
+        :param uri:
+        :param base_url:
+        :return:
+        """
+        try:
+            if uri.find('http://') == 0 or uri.find('https://') == 0:
+                return uri
+            if uri.startswith('//'):
+                return 'http:%s' % uri
+
+            url_info = urlparse(base_url)
+            root_path = '%s://%s' % (url_info.scheme, url_info.netloc)
+
+            if uri == '.' or not uri:
+                uri = base_url
+            elif uri[0] == '/':
+                uri = root_path + uri
+            else:
+                uri = base_url + '/' + uri
+            return uri
+        except Exception as e:
+            # charset error try again
+            self.print(e)
+            if not isinstance(uri, unicode):
+                return self.real_url(self.getCodeStr(uri, 'utf-8').decode('utf-8'), base_url)
+
+        try:
+            if uri == '.' or not uri:
+                uri = base_url
+            elif uri[0] == '/':
+                uri = root_path + uri
+            else:
+                uri = base_url + '/' + uri
+        except Exception as e:
+            self.log(e)
+            return self.real_url(self.getCodeStr(uri, 'utf-8').decode('utf-8'), base_url)
+        return uri
+
+    @staticmethod
+    def print(*args, sep=' ', end='\n', file=None):
         print(*args, sep=sep, end=end, file=file)
 
     def run(self):
