@@ -85,7 +85,7 @@ class Spider:
             f.write(content)
             f.close()
         except IOError as e:
-            print(e)
+            self.print(e)
 
     def file_get_contents(self, url):
         """
@@ -99,7 +99,7 @@ class Spider:
                 return req.content
             except Exception as e:
                 msg = u'下载文件 %s 时报出错误: %s' % (url, e)
-                print("file %s download error: %s" % (url, e))
+                self.print("file %s download error: %s" % (url, e))
                 self.log(msg)
                 return None
 
@@ -120,8 +120,13 @@ class Spider:
 
         return self.file_put_contents(self.target_root_dir + '/' + '%s.log' % log_file,
                                  "[%s] %s\n" % (time.strftime('%Y-%m-%d %H:%M:%S'), msg), 'ab')
+
+    def print(self, *args, sep=' ', end='\n', file=None):
+        print(*args, sep=sep, end=end, file=file)
+
     def run(self):
-        print(self.file_get_contents(self.url))
+        self.print(self.file_get_contents(self.url))
+
 
 def main():
     sp1 = Spider('http://www.baidu.com')
