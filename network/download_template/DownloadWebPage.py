@@ -13,6 +13,7 @@ class Spider:
     base_url=''
     base_name='index.html'
 
+
     timeout=30
     session=''
     target_root_dir = 'html'
@@ -374,6 +375,7 @@ class Spider:
 
 def main():
     sp1 = Spider('http://www.baidu.com')
+    sp1.base_name='index.html'
     sp1.run()
 
 
