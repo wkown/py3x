@@ -13,10 +13,24 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        #添加自定义的控件
         self.pushButton1 = QPushButton()
         self.pushButton1.setObjectName("pushButton1")
         self.pushButton1.setText("pushButton1")
         self.ui.verticalLayout.addWidget(self.pushButton1)
+
+        # 修改控件时间
+        self.ui.pushButton.clicked.connect(func)
+        self.pushButton1.clicked.connect(self.pushButton1OnClick)
+
+
+    def pushButton1OnClick(self):
+        self.ui.lineEdit.setText("hello 啥？")
+
+
+def func():
+    print('hello world')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
