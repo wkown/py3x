@@ -30,12 +30,13 @@ class RealTimeCurveQChartWidget(QtWidgets.QWidget):
         self.chart.axisY().setRange(0, self.maxY)
 
         self.chartView = QtCharts.QChartView(self.chart)
-        # self.chartView.setRenderHint(QtGui.QPainter.Antialiasing)
+        #self.chartView.setRenderHint(QtGui.QPainter.Antialiasing)
 
         layout = QtWidgets.QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(self.chartView)
         self.setLayout(layout)
+        self.thread=None
 
     def dataRecieved(self, value):
         self.data.append(value)
@@ -57,6 +58,12 @@ class RealTimeCurveQChartWidget(QtWidgets.QWidget):
                 self.scatterSeries.append(less * dx + i * dx, self.data[i])
                 i += 1
 
+    def closeEvent(self, event:QtGui.QCloseEvent):
+        if self.thread is not None:
+            self.thread.stopFlag = True
+            self.thread.join()
+        return QtWidgets.QWidget.closeEvent(self,event)
+
 
 class MyTread(threading.Thread):
     def __init__(self,widget):
@@ -76,7 +83,7 @@ if __name__ == "__main__":
     w.resize(700, 400)
     w.show()
     thread = MyTread(w)
+    w.thread = thread
     thread.start()
-    #thread.stopFlag=True
-    #thread.join()
+
     sys.exit(app.exec_())
