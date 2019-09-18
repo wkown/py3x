@@ -58,7 +58,7 @@ class RealTimeCurveQChartWidget(QtWidgets.QWidget):
                 self.scatterSeries.append(less * dx + i * dx, self.data[i])
                 i += 1
 
-    def closeEvent(self, event:QtGui.QCloseEvent):
+    def closeEvent(self, event: QtGui.QCloseEvent):
         if self.thread is not None:
             self.thread.stopFlag = True
             self.thread.join()
