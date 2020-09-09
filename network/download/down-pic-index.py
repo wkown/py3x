@@ -35,6 +35,7 @@ if args.output != "":
 
 if not os.path.isdir(output):
     os.mkdir(output)
+headers = {'user-agent': 'User-Agent:Mozilla/4.0(compatible;MSIE7.0;WindowsNT5.1;Trident/4.0;SE2.XMetaSr1.0;SE2.XMetaSr1.0;.NETCLR2.0.50727;SE2.XMetaSr1.0)'}
 
 for i in range(start_index, end_index+1):
     url = url_pattern.replace('*', str(i))
@@ -44,7 +45,7 @@ for i in range(start_index, end_index+1):
     if os.path.isfile(path_file):
         continue
 
-    req = requests.get(url, timeout=timeout)
+    req = requests.get(url, timeout=timeout,headers=headers)
     if req.status_code != 200:
         print("Request Code: %s" % req.status_code)
         continue
