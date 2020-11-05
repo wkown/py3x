@@ -3,7 +3,7 @@
 # command: scrapy runspider quotes_spider.py -o quotes.jl
 # pycharm debug config:
 #       Module name:scrapy.cmdline
-#       Parameters: runspider quotes_spider.py  -o test.jl
+#       Parameters: runspider quotes_spider.py  -o quotes.jl
 import scrapy
 
 class QuotesSpider(scrapy.Spider):
