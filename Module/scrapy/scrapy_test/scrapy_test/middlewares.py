@@ -109,3 +109,18 @@ class RandomUserAgent(object):
     def process_request(self, request, spider):
         ua = UserAgent()
         request.headers['User-Agent'] = ua.random
+
+
+class ProxyMiddleware(object):
+    """custom proxy"""
+    def process_request(self, request, spider):
+
+        if request.url.startswith("http://"):
+            request.meta['proxy'] = "http://127.0.0.1:8888"  # http代理
+        elif request.url.startswith("https://"):
+            request.meta['proxy'] = "http://127.0.0.1:8888"  # https代理
+
+#         # proxy authentication
+#         proxy_user_pass = "USERNAME:PASSWORD"
+#         encoded_user_pass = base64.encodestring(proxy_user_pass)
+#         request.headers['Proxy-Authorization'] = 'Basic ' + encoded_user_pass

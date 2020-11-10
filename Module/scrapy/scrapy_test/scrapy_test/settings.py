@@ -61,6 +61,10 @@ DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
     'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
     'scrapy_fake_useragent.middleware.RetryUserAgentMiddleware': 401,
+
+    # use custom proxy
+    #'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': None,
+    #'scrapy_test.middlewares.ProxyMiddleware': 100,
 }
 
 # Enable or disable extensions
