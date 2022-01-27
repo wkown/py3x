@@ -7,7 +7,7 @@ __author__ = 'walkskyer'
 import urllib
 import re
 import os
-from network.download_template.DownloadWebPage import Spider
+from network.download_web_page.DownloadWebPage import Spider
 
 if __name__ == "__main__":
     raw_url = input('input a url : ').strip()

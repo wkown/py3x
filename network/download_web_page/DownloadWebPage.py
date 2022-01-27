@@ -8,6 +8,39 @@ is_python3 = sys.version_info.major == 3
 if is_python3:
     unicode = str
 
+def getCodeStr(result, target_charset='utf-8'):
+    # gb2312
+    try:
+        myResult = result.decode('gb2312').encode(target_charset, 'ignore')
+        return myResult
+    except:
+        pass
+        # utf-8
+    try:
+        myResult = result.decode('utf-8').encode(target_charset, 'ignore')
+        return myResult
+    except:
+        pass
+
+    # unicode
+    try:
+        myResult = result.encode(target_charset, 'ignore')
+        return myResult
+    except:
+        pass
+        # gbk
+    try:
+        myResult = result.decode('gbk').encode(target_charset, 'ignore')
+        return myResult
+    except:
+        pass
+        # big5
+    try:
+        myResult = result.decode('big5').encode(target_charset, 'ignore')
+        return myResult
+    except:
+        pass
+
 class Spider:
     url=''
     base_url=''
@@ -47,37 +80,7 @@ class Spider:
         }
 
     def getCodeStr(self, result, target_charset='utf-8'):
-        # gb2312
-        try:
-            myResult = result.decode('gb2312').encode(target_charset, 'ignore')
-            return myResult
-        except:
-            pass
-            # utf-8
-        try:
-            myResult = result.decode('utf-8').encode(target_charset, 'ignore')
-            return myResult
-        except:
-            pass
-
-        # unicode
-        try:
-            myResult = result.encode(target_charset, 'ignore')
-            return myResult
-        except:
-            pass
-            # gbk
-        try:
-            myResult = result.decode('gbk').encode(target_charset, 'ignore')
-            return myResult
-        except:
-            pass
-            # big5
-        try:
-            myResult = result.decode('big5').encode(target_charset, 'ignore')
-            return myResult
-        except:
-            pass
+        return getCodeStr(result, target_charset)
 
     def file_put_contents(self, filename, content, mode='wb'):
         """
