@@ -193,7 +193,7 @@ class DownloadPanel(wx.Panel):
             base_name = os.path.basename(url)
 
             pos = int(base_name.find('.'))
-            if pos is -1:
+            if pos == -1:
                 ext = None
             else:
                 ext = base_name[pos + 1:]
