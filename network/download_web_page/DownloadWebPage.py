@@ -1,12 +1,15 @@
 # -*- coding:utf-8 -*-
 import re
-import os,sys
+import os
+import sys
 import requests
 import time
 from urllib.parse import urlparse
+
 is_python3 = sys.version_info.major == 3
 if is_python3:
     unicode = str
+
 
 def getCodeStr(result, target_charset='utf-8'):
     # gb2312
@@ -41,14 +44,14 @@ def getCodeStr(result, target_charset='utf-8'):
     except:
         pass
 
+
 class Spider:
-    url=''
-    base_url=''
-    base_name='index.html'
+    url = ''
+    base_url = ''
+    base_name = 'index.html'
 
-
-    timeout=30
-    session=''
+    timeout = 30
+    session = ''
     target_root_dir = 'html'
     pattern = {
         'js': re.compile(r'<script.*?src=[\'\"](.*?)[\'\"].*?</script>', re.IGNORECASE),
@@ -69,9 +72,9 @@ class Spider:
     inner_files = {'css': {'pattern': re.compile('url\([\'\"]?(.*?)[\'\"]?\)', re.IGNORECASE), 'dir': '../images'}}
     on_save_basename = True
 
-    def __init__(self,url):
-        self.url=url
-        self.session=requests.session()
+    def __init__(self, url):
+        self.url = url
+        self.session = requests.session()
         self.session.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0',
             'Accept-Encoding': ', '.join(('gzip', 'deflate')),
@@ -175,7 +178,12 @@ class Spider:
             filename = filename[0: pos]
 
         if filename and not origin_name:
-            path = os.path.dirname(url.strip()).replace('http://', '').replace('https://', '').replace('//', '').replace('..', '')
+            path = (os.path.dirname(url.strip())
+                    .replace('http://', '')
+                    .replace('https://', '')
+                    .replace('//', '')
+                    .replace('..', '')
+                    )
             filename = '%s-%s' % (path.replace('/', '-'), filename)
         return filename
 
@@ -294,11 +302,11 @@ class Spider:
     def log(self, msg, log_file='download'):
         if msg is None:
             return
-        #if isinstance(msg, unicode):
+        # if isinstance(msg, unicode):
         #    msg = msg.encode('utf-8', 'ignore')
 
         return self.file_put_contents(self.target_root_dir + '/' + '%s.log' % log_file,
-                                 "[%s] %s\n" % (time.strftime('%Y-%m-%d %H:%M:%S'), msg), 'ab')
+                                      "[%s] %s\n" % (time.strftime('%Y-%m-%d %H:%M:%S'), msg), 'ab')
 
     @staticmethod
     def print(*args, sep=' ', end='\n', file=None):
@@ -362,15 +370,19 @@ class Spider:
                         continue
                     css_matches = self.inner_files['css']['pattern'].findall(css_content)
                     if css_matches:
-                        self.download_files(css_matches, self.dirs['css_image'], self.real_url(os.path.dirname(css_file), self.base_url),
-                                       save_basename)
-                        css_content = self.inner_files['css']['pattern'].sub(self.replace_inner_source_file_path, css_content)
-                        self.file_put_contents(self.target_root_dir + '/' + 'css/' + self.get_target_name(css_file, save_basename),
-                                          css_content)
+                        self.download_files(css_matches, self.dirs['css_image'],
+                                            self.real_url(os.path.dirname(css_file), self.base_url),
+                                            save_basename)
+                        css_content = self.inner_files['css']['pattern'].sub(self.replace_inner_source_file_path,
+                                                                             css_content)
+                        self.file_put_contents(
+                            self.target_root_dir + '/' + 'css/' + self.get_target_name(css_file, save_basename),
+                            css_content)
 
         self.file_put_contents(self.target_root_dir + '/' + self.base_name, page_content)
         self.print("Download task is complete ^_^")
-        self.print("****************************************************************************************************")
+        self.print(
+            "****************************************************************************************************")
         self.print(os.getcwd())
         # os.chdir('..')
         self.print(os.getcwd())
@@ -378,7 +390,7 @@ class Spider:
 
 def main():
     sp1 = Spider('http://www.baidu.com')
-    sp1.base_name='index.html'
+    sp1.base_name = 'index.html'
     sp1.run()
 
 

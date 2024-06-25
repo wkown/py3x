@@ -57,13 +57,13 @@ class DownloadPanel(wx.Panel):
         textFieldSize = (500, -1)
         lblSize = (70, -1)
 
-        #输入网址
+        # 输入网址
         self.lbl_url = wx.StaticText(self, size=lblSize, label=u"目标网址:", style=wx.ALIGN_RIGHT)
         gridSizer.Add(self.lbl_url, pos=(0, 0), flag=wx.ALIGN_RIGHT)
         self.txt_url = wx.TextCtrl(self, size=textFieldSize)
-        gridSizer.Add(self.txt_url, pos=(0, 1), span=(1,3))
+        gridSizer.Add(self.txt_url, pos=(0, 1), span=(1, 3))
 
-        #选择本地源文件
+        # 选择本地源文件
         self.lbl_local = wx.StaticText(self, size=lblSize, label=u"本地源文件:", style=wx.ALIGN_RIGHT)
         gridSizer.Add(self.lbl_local, pos=(1, 0), flag=wx.ALIGN_RIGHT)
         self.txt_local = wx.TextCtrl(self, value=self.defaultLocalTxt, size=(430, -1), style=wx.TE_READONLY)
@@ -77,30 +77,29 @@ class DownloadPanel(wx.Panel):
         gridSizer.Add(self.btn_local_clear, pos=(1, 3))
         self.Bind(wx.EVT_BUTTON, self.OnLocalClear, self.btn_local_clear)
 
-        #保存文件名
+        # 保存文件名
         self.lbl_target_filename = wx.StaticText(self, size=lblSize, label=u"保存文件名:", style=wx.ALIGN_RIGHT)
         gridSizer.Add(self.lbl_target_filename, pos=(2, 0), flag=wx.ALIGN_RIGHT)
         self.txt_target_filename = wx.TextCtrl(self, size=textFieldSize, value="index.html")
-        gridSizer.Add(self.txt_target_filename, pos=(2, 1), span=(1,3))
+        gridSizer.Add(self.txt_target_filename, pos=(2, 1), span=(1, 3))
 
-        #显示日志
+        # 显示日志
 
         self.txt_log = wx.TextCtrl(self, style=wx.TE_MULTILINE | wx.TE_READONLY)
         self.Bind(EVT_DWP_PRINT, self.PrintLog)
 
-        #参数设置
+        # 参数设置
         self.lbl_target_filename = wx.StaticText(self, size=lblSize, label=u"附加参数:", style=wx.ALIGN_RIGHT)
         gridSizer.Add(self.lbl_target_filename, pos=(3, 0), flag=wx.ALIGN_RIGHT)
         self.checkbox_save_basename = wx.CheckBox(self, -1, u'保存路径名', style=wx.ALIGN_RIGHT)
         gridSizer.Add(self.checkbox_save_basename, pos=(3, 1))
         self.Bind(wx.EVT_CHECKBOX, self.OnSaveBasename, self.checkbox_save_basename)
 
-
-        #下载按钮
+        # 下载按钮
         self.btn_download = wx.Button(self, label=u"下载")
         self.Bind(wx.EVT_BUTTON, self.OnDownload, self.btn_download)
 
-        #使用布局
+        # 使用布局
         mainSizer.Add(gridSizer, 0, wx.EXPAND)
         mainSizer.Add(self.btn_download, 0, wx.CENTER)
         mainSizer.Add(self.txt_log, 1, wx.EXPAND)
@@ -128,9 +127,9 @@ class DownloadPanel(wx.Panel):
             self, message=u"选择一个文件..",
             defaultDir=os.getcwd(),
             defaultFile="",
-            wildcard= self.wildcard,
+            wildcard=self.wildcard,
             style=wx.FD_OPEN
-            )
+        )
         if dlg.ShowModal() == wx.ID_OK:
             # This returns a Python list of files that were selected.
             paths = dlg.GetPaths()
@@ -167,8 +166,8 @@ class DownloadPanel(wx.Panel):
         url = self.txt_url.GetValue()
         if url == "":
             dlg = wx.MessageDialog(self, u'请填写一个有效的目标网址!如:http://www.baidu.com',
-                               u'请输入目标网址',
-                               wx.OK | wx.ICON_INFORMATION)
+                                   u'请输入目标网址',
+                                   wx.OK | wx.ICON_INFORMATION)
             dlg.SetOKLabel(u'确定')
             dlg.ShowModal()
             dlg.Destroy()
@@ -206,7 +205,6 @@ class DownloadPanel(wx.Panel):
         if base_url == 'http:' or base_url == 'http:/':
             base_url = root_path
 
-
         target_name = self.txt_target_filename.GetValue()
         if target_name:
             base_name = target_name
@@ -216,8 +214,8 @@ class DownloadPanel(wx.Panel):
         time.sleep(2)
         spider.base_name = base_name
         spider.base_url = base_url
-        thread.start_new_thread(spider.run,())
-        #w_dwp.run_download(url, base_url, base_name)
+        thread.start_new_thread(spider.run, ())
+        # w_dwp.run_download(url, base_url, base_name)
 
 
 class DwpFrame(wx.Frame):
@@ -229,34 +227,32 @@ class DwpFrame(wx.Frame):
 
         self.setup_menu()
 
-
     def setup_menu(self):
-        #文件菜单
+        # 文件菜单
         menu_file = wx.Menu()
-        menu_sub_exit = menu_file.Append(wx.ID_EXIT, u'退出(&E)',u'退出程序')
-        self.Bind(wx.EVT_MENU, self.MenuExit,  menu_sub_exit)
-        #帮助菜单
+        menu_sub_exit = menu_file.Append(wx.ID_EXIT, u'退出(&E)', u'退出程序')
+        self.Bind(wx.EVT_MENU, self.MenuExit, menu_sub_exit)
+        # 帮助菜单
         menu_help = wx.Menu()
         menu_sub_help = menu_help.Append(wx.ID_HELP, u"使用手册(&M)", u"程序使用手册")
-        self.Bind(wx.EVT_MENU, self.MenuHelp,  menu_sub_help)
+        self.Bind(wx.EVT_MENU, self.MenuHelp, menu_sub_help)
         menu_sub_about = menu_help.Append(wx.ID_ABOUT, u"关于(&A)", u"关于这个程序的信息")
-        self.Bind(wx.EVT_MENU, self.MenuAbout,  menu_sub_about)
+        self.Bind(wx.EVT_MENU, self.MenuAbout, menu_sub_about)
 
         menuBar = wx.MenuBar()
         menuBar.Append(menu_file, u"文件(&F)")
         menuBar.Append(menu_help, u"帮助(&H)")
         self.SetMenuBar(menuBar)
 
-
     def MenuAbout(self, evt):
         info = wx.AboutDialogInfo()
         info.SetName(app_info['name'])
         info.SetVersion(app_info['version'])
-        #info.SetCopyright("walkskyer")
+        # info.SetCopyright("walkskyer")
         info.SetDescription(wordwrap(
             app_info['description'],
             350, wx.ClientDC(self)))
-        #info.SetWebSite(("http://www.zhangweijie.net", u"我的博客"))
+        # info.SetWebSite(("http://www.zhangweijie.net", u"我的博客"))
         info.SetDevelopers(app_info['developers'])
         licenseText = u"请自由使用"
         info.SetLicense(wordwrap(licenseText, 500, wx.ClientDC(self)))
@@ -272,11 +268,10 @@ class DwpFrame(wx.Frame):
         dlg = wx.lib.dialogs.ScrolledMessageDialog(self, msg, u"使用手册")
         dlg.ShowModal()
 
+
 class DwpMenuAction:
     def __init__(self, frame):
         self.frame = frame
-
-
 
 
 if __name__ == "__main__":
