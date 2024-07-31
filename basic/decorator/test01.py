@@ -1,8 +1,10 @@
 import time
+from functools import wraps
 
 
 def timer(func):
     def wrapper(*args, **kwargs):
+        print(f"func {func.__name__}:{func.__doc__}")
         start = time.time()
         result = func(*args, **kwargs)
         end = time.time()
@@ -13,6 +15,10 @@ def timer(func):
 
 @timer
 def test01():
+    '''
+    test function test01
+    :return:
+    '''
     time.sleep(2)
     return "test01"
 
@@ -30,7 +36,11 @@ def repeat(num):
     :return:
     """
     def decorator(func):
+
+        # 使用wraps装饰器，如果不使用wraps装饰器，则装饰器中的函数名会丢失
+        @wraps(func)
         def wrapper(*args, **kwargs):
+            print(f"func {func.__name__}:{func.__doc__}")
             for i in range(num):
                 print(f"{i} times")
                 result = func(*args, **kwargs)
@@ -40,8 +50,18 @@ def repeat(num):
 
 @repeat(3)
 def test02(name: str):
+    """
+    test function test02
+    :param name:
+    :return:
+    """
     time.sleep(2)
     return f"hello {name}"
+
+
+# 如果没有functools.wraps，则装饰器中的函数名会丢失
+print(f"test02 func name: {test02.__name__}")
+print(f"test02 func doc: {test02.__doc__}")
 
 result = test02('ZhangSan')
 
