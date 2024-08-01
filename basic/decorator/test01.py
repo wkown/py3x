@@ -4,6 +4,7 @@ from functools import wraps
 
 def timer(func):
     def wrapper(*args, **kwargs):
+        print(f"@@{timer.__name__}@@ running")
         print(f"func {func.__name__}:{func.__doc__}")
         start = time.time()
         result = func(*args, **kwargs)
@@ -27,7 +28,7 @@ example = test01()
 print(example)
 
 
-
+print("#############test02#############")
 
 # 带参数的装饰器
 def repeat(num):
@@ -40,6 +41,7 @@ def repeat(num):
         # 使用wraps装饰器，如果不使用wraps装饰器，则装饰器中的函数名会丢失
         @wraps(func)
         def wrapper(*args, **kwargs):
+            print(f"@@{repeat.__name__}@@ running")
             print(f"func {func.__name__}:{func.__doc__}")
             for i in range(num):
                 print(f"{i} times")
@@ -48,6 +50,7 @@ def repeat(num):
         return wrapper
     return decorator
 
+@timer
 @repeat(3)
 def test02(name: str):
     """
